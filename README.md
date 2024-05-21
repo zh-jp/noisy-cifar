@@ -16,6 +16,7 @@ python main.py --dataset cifar10 --human --noise_type aggre
 python main.py --dataset cifar100 --human --noise_type noisy100
 ```
 ## Noisy from Synthesis
+### symmetric noise:
 - `sym` to generate symmetric noise, otherwise asymmetric noise.
 - `noise_rate` is the noise rate of the dataset.
 ```bash
@@ -25,7 +26,7 @@ python main.py --dataset cifar10 --sym --noise_rate 0.5
 python main.py --dataset cifar100 --sym --noise_rate 0.5
 ```
 
-For asymmetric noise:
+### asymmetric noise:
 - cifar10: the noisy samples are flipped in some classes i.e. automobile < - truck, bird -> airplane, cat <-> dog, deer -> horse
 - cifar100: the noisy samples are flipped in same superclass.
 

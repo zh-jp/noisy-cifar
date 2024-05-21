@@ -32,8 +32,8 @@ def train(epoch, dataloader, model, optimizer, criterion, scaler, logger):
         data_load_time.update(time.time() - end)
         end = time.time()
 
-        images = images.cuda()
-        labels = labels.cuda()
+        images = images.cuda(non_blocking=True)
+        labels = labels.cuda(non_blocking=True)
 
         optimizer.zero_grad()
         # Forward + Backward + Optimize
@@ -77,7 +77,7 @@ def evaluate(dataloader, model, logger):
     top1 = AverageMeter('Acc@1', ':6.2f')
     top5 = AverageMeter('Acc@5', ':6.2f')
     for images, labels in dataloader:
-        images = images.cuda()
+        images = images.cuda(non_blocking=True)
         with torch.no_grad():
             logits = model(images)
         acc1, acc5 = accuracy(logits.cpu(), labels, topk=(1, 5))
@@ -92,7 +92,7 @@ def evaluate(dataloader, model, logger):
 
 def main_workers(args):
     time_cost = time.time()
-    logger = get_logger(os.path.join('./log', name))
+    logger = get_logger(os.path.join('./log', args.name))
     for k, v in vars(args).items():
         logger.info(f'{k}: {v}')
 
@@ -146,5 +146,6 @@ if __name__ == '__main__':
             name += '-asym'
     if os.path.exists(os.path.join('./log', name)) is False:
         os.makedirs(os.path.join('./log', name))
-
+    print(f'log path: ./log/{name}')
+    args.name = name
     main_workers(args)
